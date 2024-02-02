@@ -1,23 +1,25 @@
 import { InputText } from "primereact/inputtext";
 import { Button } from 'primereact/button';
 
-import { useForm, SubmitHandler, Controller } from "react-hook-form"
+import { useForm, Controller } from "react-hook-form"
 import { classNames } from "primereact/utils";
 import { Password } from "primereact/password";
 
-type CredentialsInput = {
+export type CredentialsInput = {
     username: string;
     password: string;
 }
 
-export const CredentialsLogin = () => {
+type Props = {
+    onSubmit: (data: CredentialsInput) => void;
+}
+
+export const CredentialsLogin = ({ onSubmit }: Props) => {
     const {
         control,
         formState: { errors },
         handleSubmit,
     } = useForm<CredentialsInput>();
-
-    const onSubmit: SubmitHandler<CredentialsInput> = (data) => console.log(data);
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>

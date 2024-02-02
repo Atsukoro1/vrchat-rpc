@@ -1,2 +1,2 @@
-pub mod vrchat;
 pub mod discord;
+pub mod http_client;
