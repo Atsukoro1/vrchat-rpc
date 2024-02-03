@@ -5,6 +5,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "./styles.css";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
+import 'primeicons/primeicons.css';
+
 import { LoginPage } from "./pages/login";
 import { OverviewPage } from "./pages/overview";
 import { OtpPage } from "./pages/otp";
@@ -20,7 +22,7 @@ const router = createBrowserRouter([
 		element: <LoginPage />,
 	},
 	{
-		path: "/overview",
+		path: "/overview/*",
 		element: <OverviewPage />,
 	},
 	{
