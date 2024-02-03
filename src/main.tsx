@@ -8,10 +8,15 @@ import "primereact/resources/themes/lara-light-cyan/theme.css";
 import { LoginPage } from "./pages/login";
 import { OverviewPage } from "./pages/overview";
 import { OtpPage } from "./pages/otp";
+import { WelcomePage } from "./pages/welcome";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <WelcomePage />
+  },
+  {
+    path: "/login",
     element: <LoginPage />,
   },
   {

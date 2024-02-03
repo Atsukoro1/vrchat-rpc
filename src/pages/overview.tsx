@@ -1,7 +1,9 @@
+import { OverviewMenu } from "../component/OverviewMenu"
+
 export const OverviewPage = () => {
     return (
         <div>
-            Overview
+            <OverviewMenu />
         </div>
     )
 }

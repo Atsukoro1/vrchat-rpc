@@ -30,13 +30,15 @@ export const OtpPage = () => {
 
             if (response.verified) {
                 localStorage.setItem('2faCookie', response.cookie);
-                navigate('/overview');
+                return navigate('/overview');
             }
+
+            setError('Code is invalid.');
         } catch (err) {
             const { message } = err as OtpErrorResponse;
-            setError(message)
+            setError(message);
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     }
 

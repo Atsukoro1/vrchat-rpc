@@ -13,7 +13,7 @@ type Props = {
     error?: string;
 }
 
-export const EmailOtpVerify = ({ onSubmit, isLoading }: Props) => {
+export const EmailOtpVerify = ({ onSubmit, isLoading, error }: Props) => {
     const {
         control,
         formState: { errors },
@@ -42,7 +42,7 @@ export const EmailOtpVerify = ({ onSubmit, isLoading }: Props) => {
                     )}
                 />
 
-                <small className="p-error">{errors.code?.message}</small>
+                <small className="p-error">{error}</small>
 
                 <Button loading={isLoading} className="mt-4" type="submit" label="Verify" />
             </div>
