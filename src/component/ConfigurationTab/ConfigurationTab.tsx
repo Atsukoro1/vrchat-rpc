@@ -18,7 +18,7 @@ export const ConfigurationTab = () => {
     const [selectedNodeKey, setSelectedNodeKey] = useState<Nullable<string | TreeSelectSelectionKeysType | TreeSelectSelectionKeysType[]>>();
 
     return (
-        <div className="p-4 flex flex-col gap-4 w-fit overflow-scroll">
+        <div className="p-4 flex flex-col gap-4 w-full overflow-scroll">
             <Header
                 title="Configuration"
                 description="Control how's your Discord status displayed."

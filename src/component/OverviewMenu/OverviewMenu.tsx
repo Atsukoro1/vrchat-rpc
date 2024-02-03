@@ -11,7 +11,7 @@ export const OverviewMenu = () => {
                         icon: "pi pi-fw pi-file",
                         items: [
                             { label: "Configuration", icon: "pi pi-fw pi-sliders-v", url: "/overview/configuration" },
-                            { label: "Browse", icon: "pi pi-fw pi-folder", url: "/overview/browse" },
+                            { label: "Browse", disabled: true, icon: "pi pi-fw pi-folder", url: "/overview/browse" },
                         ],
                     },
                     {
@@ -19,7 +19,7 @@ export const OverviewMenu = () => {
                         icon: "pi pi-fw pi-pencil",
                         items: [
                             { label: "Settings", icon: "pi pi-fw pi-cog", url: "/overview/settings" },
-                            { label: "Profile", icon: "pi pi-fw pi-user", url: "/overview/profile" },
+                            { label: "Profile", disabled: true, icon: "pi pi-fw pi-user", url: "/overview/profile" },
                         ],
                     },
                 ]}

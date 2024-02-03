@@ -74,16 +74,12 @@ export const EveryGame = () => {
                 <Controller
                     name="showPlayerStatus"
                     control={control}
-                    rules={{
-                        required: "Description is required.",
-                    }}
-                    render={({ field, fieldState }) => (
+                    render={({ field }) => (
                         <div className="flex align-items-center">
                             <Checkbox
                                 id={field.name}
                                 onChange={(e) => field.onChange(e.checked)}
                                 checked={field.value}
-                                className={classNames({ "p-invalid": fieldState.error })}
                                 inputId={field.name}
                             />
                             <label htmlFor={field.name} className="ml-2">Show player status</label>
@@ -94,16 +90,12 @@ export const EveryGame = () => {
                 <Controller
                     name="showTimestamp"
                     control={control}
-                    rules={{
-                        required: "Description is required.",
-                    }}
-                    render={({ field, fieldState }) => (
+                    render={({ field }) => (
                         <div className="flex align-items-center">
                             <Checkbox
                                 id={field.name}
                                 onChange={(e) => field.onChange(e.checked)}
                                 checked={field.value}
-                                className={classNames({ "p-invalid": fieldState.error })}
                                 inputId={field.name}
                             />
                             <label htmlFor={field.name} className="ml-2">Show playtime</label>

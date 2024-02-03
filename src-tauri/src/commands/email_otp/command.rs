@@ -11,8 +11,6 @@ pub async fn email_otp(
     code: String,
     auth: String,
 ) -> Result<EmailOtpSuccessResponse, EmailOtpErrorResponse> {
-    println!("{} {}", code, auth);
-
     let mut cookie_jar = CookieJar::new();
 
     cookie_jar.add(Cookie::new("auth", auth));

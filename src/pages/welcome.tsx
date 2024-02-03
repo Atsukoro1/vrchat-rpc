@@ -1,14 +1,37 @@
+import { invoke } from "@tauri-apps/api";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+type CheckUserResponse = {
+	ok: boolean;
+	token: string;
+};
+
 export const WelcomePage = () => {
 	const navigate = useNavigate();
 
+	const checkUser = async () => {
+		const cookie = localStorage.getItem("authCookie");
+		if (!cookie) return navigate("/login");
+
+		try {
+			const response: CheckUserResponse = await invoke("check_user", { auth: cookie });
+
+			if (response.ok) {
+				localStorage.setItem("authCookie", response.token);
+				return navigate("/overview");
+			}
+
+			navigate("/login");
+		} catch (error) {
+			navigate("/login");
+		}
+	}
+
 	useEffect(() => {
-		const timeout = setTimeout(() => navigate("/overview"), 1000);
-		return () => clearTimeout(timeout);
-	}, [navigate]);
+		checkUser();
+	}, [checkUser]);
 
 	return (
 		<div className="text-center w-fit mx-auto">
