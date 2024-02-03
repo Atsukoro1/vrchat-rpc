@@ -1,1 +1,1 @@
-export * from './EmailOtpVerify';
+export * from "./EmailOtpVerify";
