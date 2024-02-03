@@ -1,20 +1,24 @@
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
-type CodeInput = {
+export type CodeInput = {
     code: string;
 }
 
-export const EmailOtpVerify = () => {
+type Props = {
+    onSubmit: (data: CodeInput) => void;
+    isLoading?: boolean;
+    error?: string;
+}
+
+export const EmailOtpVerify = ({ onSubmit, isLoading }: Props) => {
     const {
         control,
         formState: { errors },
         handleSubmit,
     } = useForm<CodeInput>();
-
-    const onSubmit: SubmitHandler<CodeInput> = (data) => console.log(data);
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -38,7 +42,9 @@ export const EmailOtpVerify = () => {
                     )}
                 />
 
-                <Button className="mt-4" type="submit" label="Log in" />
+                <small className="p-error">{errors.code?.message}</small>
+
+                <Button loading={isLoading} className="mt-4" type="submit" label="Verify" />
             </div>
         </form>
     );

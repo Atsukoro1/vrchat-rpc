@@ -7,6 +7,7 @@ import "./styles.css";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import { LoginPage } from "./pages/login";
 import { OverviewPage } from "./pages/overview";
+import { OtpPage } from "./pages/otp";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: "/overview",
     element: <OverviewPage />
+  },
+  {
+    path: "/otp",
+    element: <OtpPage />
   }
 ]);
 

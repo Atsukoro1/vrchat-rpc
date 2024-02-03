@@ -12,9 +12,11 @@ export type CredentialsInput = {
 
 type Props = {
     onSubmit: (data: CredentialsInput) => void;
+    error?: string;
+    isPending?: boolean;
 }
 
-export const CredentialsLogin = ({ onSubmit }: Props) => {
+export const CredentialsLogin = ({ onSubmit, error, isPending }: Props) => {
     const {
         control,
         formState: { errors },
@@ -52,7 +54,9 @@ export const CredentialsLogin = ({ onSubmit }: Props) => {
                     )}
                 />
 
-                <Button className="mt-4" type="submit" label="Log in" />
+                <small className="p-error">{error}</small>
+
+                <Button loading={isPending} className="mt-4" type="submit" label="Log in" />
             </div>
         </form>
     )
