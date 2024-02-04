@@ -20,17 +20,14 @@ use commands::{
         get_settings,
         set_settings
     },
-    websocket_handle::command::{
-        open_socket_handle,
-        close_socket_handle
-    }
+    websocket_handle::command::open_socket_handle
 };
 use tokio::sync::Mutex;
 
 #[tokio::main]
 async fn main() {
     tauri::Builder::default()
-        .manage(Mutex::new(WebSocketState { stream: None }))
+        .manage(Mutex::new(WebSocketState { stream: None, auth_token: None }))
         .invoke_handler(tauri::generate_handler![
             user_credentials_login, 
             email_otp, 
@@ -40,7 +37,6 @@ async fn main() {
             get_settings, 
             set_settings,
             open_socket_handle,
-            close_socket_handle
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

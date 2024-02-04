@@ -3615,6 +3615,7 @@ dependencies = [
  "tauri-build",
  "tokio",
  "tokio-tungstenite",
+ "tungstenite",
  "url",
  "urlencoding",
 ]

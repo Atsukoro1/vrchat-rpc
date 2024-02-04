@@ -1,4 +1,5 @@
 // import { invoke } from "@tauri-apps/api";
+import { invoke } from "@tauri-apps/api";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -36,6 +37,9 @@ export const WelcomePage = () => {
 
 	useEffect(() => {
 		navigate("/overview");
+		invoke("open_socket_handle", {
+			authToken: localStorage.getItem("authCookie") ?? ""
+		});
 	}, [navigate]);
 
 
