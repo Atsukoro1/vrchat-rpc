@@ -4,24 +4,68 @@ import { Controller, useForm } from "react-hook-form";
 import { Header } from "../../Header";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
+import { invoke } from "@tauri-apps/api";
+import { useEffect, useRef, useState } from "react";
+import { Toast } from 'primereact/toast';
 
-type GameInfoInput = {
+type Configuration = {
     title: string;
     description: string;
     showTimestamp: boolean;
     showPlayerStatus: boolean;
+    largeImageKey: string;
+    smallImageKey: string;
 }
 
 export const EveryGame = () => {
     const {
         control,
+        setValue,
         formState: { errors },
         handleSubmit,
-    } = useForm<GameInfoInput>();
+    } = useForm<Configuration>();
 
-    const onSubmit = (data: GameInfoInput) => {
-        console.log(data);
-    }
+    const toastRef = useRef<Toast>(null);
+    const onShowUploadedToast = () => {
+        toastRef.current?.show({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Configuration saved'
+        });
+    };
+
+    const fetchInitialData = async () => {
+        try {
+            const initialData: Configuration = await invoke("get_configuration");
+
+            setValue("title", initialData.title);
+            setValue("description", initialData.description);
+            setValue("showPlayerStatus", initialData.showPlayerStatus);
+            setValue("showTimestamp", initialData.showTimestamp);
+            setValue("largeImageKey", initialData.largeImageKey);
+            setValue("smallImageKey", initialData.smallImageKey);
+        } catch (error) {
+            console.error("Error fetching initial data:", error);
+        }
+    };
+
+    const [saving, setSaving] = useState<boolean>(false);
+    const onSave = async (data: Configuration) => {
+        setSaving(true);
+
+        try {
+            await invoke("set_configuration", { data });
+            onShowUploadedToast();
+        } catch (error) {
+            console.error("Error saving configuration:", error);
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchInitialData();
+    }, [fetchInitialData]);
 
     return (
         <div className="flex flex-col gap-3">
@@ -30,7 +74,7 @@ export const EveryGame = () => {
                 description="This will be displayed for every game that you don't enable manually"
             />
 
-            <form className="gap-3 flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+            <form className="gap-3 flex flex-col" onSubmit={handleSubmit(onSave)}>
                 <Controller
                     name="title"
                     control={control}
@@ -72,6 +116,40 @@ export const EveryGame = () => {
                 />
 
                 <Controller
+                    name="smallImageKey"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                        <div className="flex flex-col gap-1">
+                            <InputText
+                                placeholder="Small image text"
+                                id={field.name}
+                                value={field.value}
+                                className={classNames({ "p-invalid": fieldState.error })}
+                                onChange={(e) => field.onChange(e.target.value)}
+                            />
+                            <small className="p-error">{errors.smallImageKey?.message}</small>
+                        </div>
+                    )}
+                />
+
+                <Controller
+                    name="largeImageKey"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                        <div className="flex flex-col gap-1">
+                            <InputText
+                                placeholder="Large image text"
+                                id={field.name}
+                                value={field.value}
+                                className={classNames({ "p-invalid": fieldState.error })}
+                                onChange={(e) => field.onChange(e.target.value)}
+                            />
+                            <small className="p-error">{errors.largeImageKey?.message}</small>
+                        </div>
+                    )}
+                />
+
+                <Controller
                     name="showPlayerStatus"
                     control={control}
                     render={({ field }) => (
@@ -104,11 +182,14 @@ export const EveryGame = () => {
                 />
 
                 <Button
+                    loading={saving}
                     type="submit"
                     icon="pi pi-check"
                     label="Save"
                 />
             </form>
+
+            <Toast ref={toastRef} />
         </div>
     )
 }

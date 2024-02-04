@@ -1,4 +1,7 @@
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+#![cfg_attr(
+    all(not(debug_assertions), target_os = "windows"),
+    windows_subsystem = "windows"
+)]
 
 mod clients;
 mod commands;
@@ -11,6 +14,10 @@ use commands::{
     configuration::command::{
         get_configuration,
         set_configuration
+    },
+    settings::{
+        command::get_settings,
+        command::set_settings
     }
 };
 
@@ -22,7 +29,9 @@ async fn main() {
             email_otp, 
             check_user, 
             get_configuration, 
-            set_configuration
+            set_configuration,
+            get_settings, 
+            set_settings
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

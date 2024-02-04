@@ -1,37 +1,43 @@
-import { invoke } from "@tauri-apps/api";
+// import { invoke } from "@tauri-apps/api";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-type CheckUserResponse = {
-	ok: boolean;
-	token: string;
-};
+// type CheckUserResponse = {
+// 	ok: boolean;
+// 	token: string;
+// };
 
 export const WelcomePage = () => {
 	const navigate = useNavigate();
 
-	const checkUser = async () => {
-		const cookie = localStorage.getItem("authCookie");
-		if (!cookie) return navigate("/login");
+	// TODO: Do this later when we have a proper backend (prevent refreshing and ratelimit)
+	// const checkUser = async () => {
+	// 	const cookie = localStorage.getItem("authCookie");
+	// 	if (!cookie) return navigate("/login");
 
-		try {
-			const response: CheckUserResponse = await invoke("check_user", { auth: cookie });
+	// 	try {
+	// 		const response: CheckUserResponse = await invoke("check_user", { auth: cookie });
 
-			if (response.ok) {
-				localStorage.setItem("authCookie", response.token);
-				return navigate("/overview");
-			}
+	// 		if (response.ok) {
+	// 			localStorage.setItem("authCookie", response.token);
+	// 			return navigate("/overview");
+	// 		}
 
-			navigate("/login");
-		} catch (error) {
-			navigate("/login");
-		}
-	}
+	// 		navigate("/login");
+	// 	} catch (error) {
+	// 		navigate("/login");
+	// 	}
+	// }
+
+	// useEffect(() => {
+	// 	checkUser();
+	// }, [checkUser]);
 
 	useEffect(() => {
-		checkUser();
-	}, [checkUser]);
+		navigate("/overview");
+	}, [navigate]);
+
 
 	return (
 		<div className="text-center w-fit mx-auto">

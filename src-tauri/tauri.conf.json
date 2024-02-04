@@ -21,7 +21,10 @@
 			"active": true,
 			"targets": "all",
 			"identifier": "com.tauri.dev",
-			"icon": ["icons/vrchat_logo.png", "icons/vrchat_logo.ico"]
+			"icon": [
+				"icons/vrchat_logo.png",
+				"icons/vrchat_logo.ico"
+			]
 		},
 		"security": {
 			"csp": null
