@@ -1,28 +1,22 @@
 use tauri::command;
 
-use crate::clients::websocket::WebSocketState;
+use ezsockets::ClientConfig;
+use url::Url;
 
-use tokio::sync::Mutex;
-
-// Define a mutable static variable to store WebSocketState
-static mut WS_STATE: Option<Mutex<WebSocketState>> = None;
+use crate::clients::websocket::{WebsocketClient, WS_CLIENT_USER_AGENT, WS_URL};
 
 #[command]
 pub async fn open_socket_handle<'a>(
     auth_token: String,
 ) -> Result<bool, ()> {
-    unsafe {
-        WS_STATE = Some(Mutex::new(WebSocketState {
-            stream: None,
-            auth_token: Some(auth_token.clone()),
-        }));
+    let url = format!("{}/?authToken={}", WS_URL, auth_token)
+        .parse::<Url>()
+        .unwrap();
+    let config = ClientConfig::new(url)
+        .header("User-Agent", WS_CLIENT_USER_AGENT);
 
-        let mut ws_state = WS_STATE.as_mut().unwrap().lock().await;
+    let (_, future) = ezsockets::connect(|handle| WebsocketClient { handle }, config).await;
+    future.await.unwrap();
 
-        ws_state.auth_token = Some(auth_token.clone());
-
-        let result = ws_state.connect().await.is_ok();
-
-        Ok(result)
-    }
+    return Ok(true);
 }

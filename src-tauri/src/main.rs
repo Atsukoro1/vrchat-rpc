@@ -6,8 +6,8 @@
 mod clients;
 mod commands;
 mod utils;
+mod schema;
 
-use clients::websocket::WebSocketState;
 use commands::{
     credentials_auth::command::user_credentials_login, 
     email_otp::command::email_otp, 
@@ -22,12 +22,10 @@ use commands::{
     },
     websocket_handle::command::open_socket_handle
 };
-use tokio::sync::Mutex;
 
 #[tokio::main]
 async fn main() {
     tauri::Builder::default()
-        .manage(Mutex::new(WebSocketState { stream: None, auth_token: None }))
         .invoke_handler(tauri::generate_handler![
             user_credentials_login, 
             email_otp, 
