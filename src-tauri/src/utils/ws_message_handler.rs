@@ -1,6 +1,11 @@
-use crate::{clients::discord::{DiscordRpcClient, DiscordRpcClientExt}, commands::configuration::schema::Configuration, schema::{user_location::UserLocationContent, websocket_event::WebsocketEvent}};
+use futures_util::FutureExt;
 
-pub fn handle_message(message: String) -> Result<(), ()> {
+use crate::{
+    clients::discord::DISCORD_CLIENT, 
+    schema::{user_location::UserLocationContent, websocket_event::WebsocketEvent}
+};
+
+pub async fn handle_message(message: String) -> Result<(), ()> {
     let message = serde_json::from_str::<WebsocketEvent>(&message).unwrap();
 
     if message.r#type != "user-location" {
@@ -8,20 +13,17 @@ pub fn handle_message(message: String) -> Result<(), ()> {
     };
 
     let content = serde_json::from_str::<UserLocationContent>(&message.content).unwrap();
-
-    let mut client = DiscordRpcClient::new();
-    client.update_configuration(
-        Configuration {
-            title: "VRCHAT".to_string(),
-            description: "Playing rest & sleep lol".to_string(),
-            show_timestamp: true,
-            show_player_status: true,
-            small_image_key: "This is a small image key".to_string(),
-            large_image_key: "This is a large image key".to_string(),
+    
+    tokio::spawn(async move {
+        println!("ok");
+        if let Ok(mut discord_client) = DISCORD_CLIENT.try_lock() {
+            discord_client.set_data(content);
+            discord_client.set_activity();
+            println!("set");
+        } else {
+            println!("Failed to acquire lock on DISCORD_CLIENT");
         }
-    );
-    client.update_player_info(content);
-    client.update_status();
+    });
 
     Ok(())
 }

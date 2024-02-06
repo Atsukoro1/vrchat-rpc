@@ -1,5 +1,4 @@
-use crate::clients::file_system::FileSystemClient;
-
+use crate::clients::{discord::DISCORD_CLIENT, file_system::FileSystemClient};
 use super::schema::Configuration;
 
 #[tauri::command] 
@@ -27,5 +26,10 @@ pub async fn get_configuration() -> Configuration {
 #[tauri::command]
 pub async fn set_configuration(data: Configuration) -> bool {
     let fs_client = FileSystemClient::new();
+
+    if let Ok(mut discord_client) = DISCORD_CLIENT.try_lock() {
+        discord_client.set_configuration(data.clone());
+    }
+
     fs_client.write_json("configuration.json", &data, None).is_ok()
 }

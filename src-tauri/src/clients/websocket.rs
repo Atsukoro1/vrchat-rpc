@@ -17,7 +17,7 @@ impl ezsockets::ClientExt for WebsocketClient {
     type Call = ();
 
     async fn on_text(&mut self, text: String) -> Result<(), Error> {
-        ws_message_handler::handle_message(text).expect("Failed to handle the message");
+        ws_message_handler::handle_message(text).await.expect("Failed to handle the message");
         Ok(())
     }
 
